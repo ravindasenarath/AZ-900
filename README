@@ -173,19 +173,20 @@ Azure Example: Resizing VM from D2s_v3 to D4s_v3
  - Advantage: No theoretical limit
  - Azure Example: VM Scale Sets
 
-Comparison Table:
-
-| Characteristic | Vertical Scaling | Horizontal Scaling |
-| Complexity | Low | Medium |
-| Downtime | Requires restart |	None |
-| Cost |	Expensive upgrades | Linear growth |
-| Azure Tool |	VM Resize |	Scale Sets |
+### Scaling Methods Comparison
+| Characteristic       | Vertical Scaling       | Horizontal Scaling     |
+|----------------------|------------------------|------------------------|
+| **Complexity**       | Low                    | Medium                 |
+| **Downtime**         | Requires restart       | None                   |
+| **Cost**            | Expensive upgrades     | Linear growth          |
+| **Azure Tool**      | VM Resize              | Scale Sets             |
 
 ### 4.3 Availability vs Scalability
-| Goal |	Solution |	Key Azure Service |
-| Stay online during failures |	High Availability |	Availability Zones |
-| Handle more traffic |	Scalability | VM Scale Sets |
-| Both |	Combined approach |	Load Balancer + Zones + Scale Sets |
+| Goal                          | Solution               | Key Azure Service               |
+|-------------------------------|------------------------|----------------------------------|
+| Stay online during failures   | High Availability      | Availability Zones              |
+| Handle more traffic           | Scalability            | VM Scale Sets                   |
+| Both                          | Combined approach      | Load Balancer + Zones + Scale Sets |
 
 #### Exam Tips:
 Availability Zones:
