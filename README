@@ -956,6 +956,655 @@ Multi-zone: 99.99% (extra "9" matters)
 - **Azure Data Box**: Physical data transfer device
 - **Data Lake Storage Gen2**: Unified analytics storage
 
+### Azure Storage Key Concepts (Exam Focus)
+
+#### **Replication Types**
+1. **Primary Region**:
+   - **LRS** (Local): 
+     - 3 sync copies in 1 datacenter
+     - 11 nines durability
+     - Cheapest option
+   - **ZRS** (Zone):
+     - 3 sync copies across AZs
+     - 12 nines durability
+     - Protects against AZ failure
+
+2. **Secondary Region**:
+   - **GRS**: LRS + async copy to paired region
+   - **GZRS**: ZRS + async geo-replication
+   - 16 nines durability
+   - Secondary only accessible during failover
+
+3. **Read Access Secondary**:
+   - **RA-GRS/RA-GZRS**: 
+     - Sync copies in secondary region
+     - Allows read access to secondary
+
+#### **Blob Storage Essentials**
+- **Types**:
+  - **Block blobs**: Standard files (4.7TB max)
+  - **Append blobs**: Log files (append-only)
+  - **Page blobs**: VHDs (8TB max)
+
+- **Access Tools**:
+  - **AZCopy**: CLI utility (needs RBAC roles)
+  - **Storage Explorer**: GUI management
+
+#### **Azure Files**
+- Managed SMB/NFS shares in cloud
+- Use cases:
+  - Replace on-prem file servers
+  - Centralized app settings
+  - Container persistent storage
+  - Hybrid cloud deployments
+
+#### **Azure File Sync**
+- Caches Azure file shares on local servers
+- Enables:
+  - Cloud tiering (hot/cold files)
+  - Multi-site sync
+  - Protocol flexibility (SMB/NFS/FTP)
+
+#### **Key Exam Notes**
+- **Sync vs Async**:
+  - Sync = immediate consistency (LRS/ZRS)
+  - Async = eventual consistency (GRS/GZRS)
+- **Naming**: Storage account names must be globally unique (DNS-based)
+- **Performance**: Premium = SSD (low latency), Standard = HDD
+- **Access Tiers**: Hot (frequent), Cool (30d+), Archive (180d+)
+
+### Azure Active Directory (Key Exam Concepts)
+
+#### **Azure AD Editions**
+| Tier | Key Features |
+|------|-------------|
+| **Free** | Basic MFA, SSO, user management |
+| **Office 365 Apps** | Company branding, on-prem sync |
+| **Premium P1** | Hybrid architectures, conditional access |
+| **Premium P2** | Identity protection, governance |
+
+#### **Core Components**
+- **Identity Providers**: Cloud-based authentication service
+- **AD Domain Services**: Managed domain controllers (LDAP/Kerberos/NTLM)
+- **External Identities**: B2B (business partners) and B2C (consumer) scenarios
+
+#### **Single Sign-On (SSO) Protocols**
+| Protocol | Use Case | Notes |
+|----------|---------|-------|
+| **OpenID Connect** | Modern web apps | Built on OAuth 2.0 |
+| **SAML** | Enterprise federation | XML-based |
+| **Password-based** | Legacy apps | Credential replay |
+| **IWA** | On-prem Windows | Uses domain credentials |
+| **Header-based** | Custom apps | Token in HTTP headers |
+
+#### **Multi-Factor Authentication (MFA)**
+- Requires 2+ verification methods
+- Protects against credential theft
+- Enabled by default in P1/P2 tiers
+
+#### **Conditional Access**
+- **Policy Components**:
+  - Signals (user/device/location)
+  - Conditions (apps/risk levels)
+  - Controls (block/require MFA)
+- **Key Scenarios**:
+  - Require MFA for admins
+  - Block access from risky locations
+  - Device compliance enforcement
+
+#### **Terminology**
+- **Domain Controller**: Auth server (on-prem/cloud)
+- **GPO**: Security policy container
+- **Organizational Unit (OU)**: AD object container
+- **Hybrid Identity**: Sync between on-prem AD and Azure AD
+
+#### **Exam Notes**
+- Azure AD ≠ On-prem AD (complementary services)
+- P1/P2 required for advanced features
+- Conditional access evaluates signals in real-time
+- B2B vs B2C external identities have different use cases
+
+### Zero Trust & Defense in Depth
+
+#### **Microsoft Zero Trust Model**
+**Core Principles**:
+1. **Verify Explicitly**  
+   - Authenticate/authorize using all available signals (user, device, location, etc.)
+   
+2. **Least Privilege Access**  
+   - JIT (Just-In-Time) access  
+   - JEA (Just-Enough-Access) policies  
+   - Risk-based adaptive controls
+
+3. **Assume Breach**  
+   - Micro-segmentation  
+   - End-to-end encryption  
+   - Continuous monitoring
+
+**Six Pillars**:
+1. **Identities** (Azure AD/Microsoft Entra)  
+2. **Endpoints** (Devices)  
+3. **Applications**  
+4. **Data**  
+5. **Infrastructure**  
+6. **Networks**
+
+#### **Defense in Depth (7 Layers)**
+| Layer | Focus | Example Controls |
+|-------|-------|------------------|
+| **Data** | Encryption & access | Azure Storage Service Encryption |
+| **Application** | Secure development | Web Application Firewall |
+| **Compute** | VM/endpoint security | Azure Security Center monitoring |
+| **Network** | Segmentation | NSGs, Azure Firewall |
+| **Perimeter** | DDoS protection | Azure DDoS Protection |
+| **Identity** | Access control | Conditional Access, MFA |
+| **Physical** | Datacenter security | Biometric access controls |
+
+#### **Key Exam Takeaways**
+- Zero Trust replaces traditional perimeter-based security
+- Identity is the new security perimeter (Azure AD focus)
+- Defense in Depth provides layered protection
+- Microsoft's model aligns with NIST SP 800-207 standard
+- All principles apply across all Azure services
+
+### Azure Defender & Multi-Factor Authentication
+
+#### **Azure Defender**
+1. **Core Components**:
+   - **Coverage**: Protects multiple resource types (VMs, SQL, Key Vaults, Storage, etc.)
+   - **Security Alerts**: Real-time threat notifications with remediation steps
+   - **Insights**: Security recommendations and priority alerts
+   - **Advanced Protection**: Additional security features (see below)
+
+2. **Key Features**:
+   - VM vulnerability assessments
+   - Just-in-Time VM access
+   - Container image scanning
+   - Adaptive network hardening
+   - Network map visualization
+
+3. **Protection Scope**:
+   - Works across Azure, hybrid, and multi-cloud (via Azure Arc)
+   - Covers AWS/GCP resources when integrated
+   - Unified security management plane
+
+#### **Multi-Factor Authentication (MFA)**
+1. **How It Works**:
+   - Requires two or more verification methods:
+     - Something you know (password)
+     - Something you have (phone/app)
+     - Something you are (biometrics)
+
+2. **Azure MFA Methods**:
+   - Microsoft Authenticator app
+   - SMS/text verification
+   - Phone call verification
+   - OAuth hardware tokens
+
+3. **Why Use MFA**:
+   - Mitigates credential theft
+   - Required for Conditional Access policies
+   - Complies with most security frameworks
+
+4. **Implementation**:
+   - Enabled by default in Azure AD Premium tiers
+   - Can enforce via Conditional Access policies
+   - Applies to both cloud and hybrid identities
+
+#### **Exam Notes**
+- Azure Defender is part of Microsoft Defender for Cloud
+- MFA is a core Zero Trust requirement
+- Network maps provide visual security topology
+- JIT VM access reduces attack surface
+- Azure Arc enables cross-cloud security management
+
+### Azure Security & Management Services
+
+#### **Azure Security Center**
+- **Purpose**: Unified security management for hybrid cloud
+- **Key Features**:
+  - Continuous compliance monitoring
+  - Security posture scoring
+  - Integrated with Azure Defender (advanced threat protection)
+
+#### **Azure Key Vault**
+- **Functions**:
+  - Secrets management (passwords, API keys)
+  - Key management (encryption keys)
+  - Certificate management (SSL/TLS)
+  - HSM-backed storage (FIPS 140-2 validated)
+
+#### **DDoS Protection**
+| Tier | Features | Cost |
+|------|----------|------|
+| **Basic** | Always-on traffic monitoring | Free |
+| **Standard** | Metrics/alerts, SLA guarantee | ~$3k/month |
+
+**Attack Types**:
+1. Volumetric (bandwidth exhaustion)
+2. Protocol (TCP/UDP floods)
+3. Application layer (HTTP/SQL attacks)
+
+#### **Azure Firewall**
+- Stateful firewall-as-a-service
+- Features:
+  - Threat intelligence feeds
+  - Network traffic filtering
+  - Azure Monitor integration
+  - Static public IP support
+
+#### **Application Gateway**
+- Layer 7 load balancer
+- **Routing Rules**:
+  - Basic (catch-all)
+  - Multi-site (host header-based)
+- **Backend Pool Options**:
+  - VMs, VMSS, IPs, App Services
+
+#### **RBAC (Role-Based Access Control)**
+| Role | Permissions |
+|------|------------|
+| Owner | Full access + grant rights |
+| Contributor | Create/manage (no grants) |
+| Reader | View-only |
+| User Admin | Manage user access |
+
+**RBAC Components**:
+1. Security Principal (who)
+2. Role Definition (what)
+3. Scope (where - mgmt group/sub/RG/resource)
+
+#### **Management Groups**
+- Hierarchical organization of subscriptions
+- Inheritance: Policies apply downward
+- Root MG → Child MGs → Subscriptions
+
+#### **Azure Service Health**
+- **Three Components**:
+  1. Azure Status (global outages)
+  2. Service Health (personalized view)
+  3. Resource Health (per-resource status)
+
+#### **Key Exam Notes**
+- Key Vault uses HSMs for FIPS compliance
+- App Gateway supports SSL termination
+- RBAC scope hierarchy: MG > Sub > RG > Resource
+- DDoS Standard required for SLA protection
+- Security Center provides unified security posture
+
+### Part 25: Azure Optimization & Development Services
+
+#### **Azure Advisor**
+- **Purpose**: Personalized cloud optimization recommendations
+- **Categories**:
+  1. Cost (e.g., idle resources)
+  2. Security (e.g., MFA enablement)
+  3. Performance (e.g., VM sizing)
+  4. High Availability (e.g., backup configuration)
+  5. Operational Excellence (e.g., activity log alerts)
+
+#### **Azure Database Services**
+| Service | Type | Key Feature |
+|---------|------|-------------|
+| **Cosmos DB** | NoSQL | 99.999% SLA, multi-model |
+| **SQL Database** | Relational (MS SQL) | Fully managed PaaS |
+| **Database for MySQL/PostgreSQL** | Relational | Open-source RDBMS |
+| **SQL Server on VMs** | Relational (MS SQL) | Lift-and-shift IaaS |
+| **Synapse Analytics** | Data Warehouse | Integrated analytics |
+| **Cache for Redis** | In-memory | Low-latency caching |
+| **Table Storage** | NoSQL | Key-value store |
+
+#### **Application Integration Services**
+1. **Notification Hub**: Cross-platform push notifications
+2. **API Apps**: Cloud-hosted API endpoints
+3. **Service Bus**: Enterprise messaging (pub/sub)
+4. **Stream Analytics**: Real-time event processing
+5. **Logic Apps**: Workflow automation (low-code)
+6. **API Management**: API gateway with analytics
+7. **Queue Storage**: App-to-app messaging
+
+#### **Developer Tools**
+- **SignalR**: Real-time web functionality
+- **App Service**: Fully managed web apps (PaaS)
+- **Visual Studio**: Azure-integrated IDE
+- **Xamarin**: Mobile app development framework
+
+#### **Key Exam Notes**
+- Cosmos DB offers 5 nines availability
+- SQL Database vs SQL on VMs: PaaS vs IaaS
+- Service Bus vs Queue Storage: Enterprise vs simple messaging
+- Logic Apps use connectors for SaaS integration
+- Advisor recommendations are subscription-scoped
+
+### Part 26: Azure DevOps, Networking & IoT Services
+
+#### **Azure DevOps Services**
+| Service | Purpose | Key Feature |
+|---------|---------|-------------|
+| **Boards** | Agile planning | Kanban boards, sprint tracking |
+| **Pipelines** | CI/CD | Multi-cloud deployments |
+| **Repos** | Code management | Git repositories (like GitHub) |
+| **Test Plans** | QA testing | Manual/exploratory testing tools |
+| **Artifacts** | Package management | NuGet/npm feeds |
+| **DevTest Labs** | Environment mgmt | Quick dev/test sandboxes |
+
+#### **Cloud-Native Networking**
+1. **Azure DNS**: Ultra-fast domain management
+2. **VNETs**: Isolated network segments
+3. **Load Balancer (L4)**: TCP/UDP traffic distribution
+4. **Application Gateway (L7)**: HTTP routing + WAF
+5. **NSGs**: Virtual firewall for subnets/VMs
+
+#### **Enterprise/Hybrid Networking**
+| Service | Use Case | Throughput |
+|---------|----------|------------|
+| **Front Door** | Global entry point | HTTP acceleration |
+| **ExpressRoute** | Private cloud connection | 50Mbps-10Gbps |
+| **Virtual WAN** | Hub-spoke networking | Unified management |
+| **VPN Gateway** | Site-to-site VPN | Lower bandwidth |
+
+#### **Azure Traffic Manager**
+- **DNS-level** load balancing
+- **Routing Methods**:
+  - Performance (latency-based)
+  - Priority (failover)
+  - Geographic (location-based)
+  - Weighted (A/B testing)
+
+#### **IoT Services**
+| Service | Purpose | Key Feature |
+|---------|---------|-------------|
+| **IoT Central** | SaaS IoT solution | No-code device mgmt |
+| **IoT Hub** | Device-cloud comms | Bi-directional messaging |
+| **IoT Edge** | Edge computing | Local data processing |
+| **Win10 IoT Core** | Embedded OS | Long-term support |
+
+#### **Key Exam Notes**
+- ExpressRoute provides **private** (not Internet) connectivity
+- Traffic Manager vs Load Balancer: DNS vs IP routing
+- IoT Edge enables offline-capable devices
+- DevOps Pipelines support multi-cloud deployments
+- Application Gateway includes WAF capability
+
+### Part 27: Azure Big Data & AI Services
+
+#### **Big Data & Analytics**
+| Service | Type | Key Feature |
+|---------|------|-------------|
+| **Synapse Analytics** | Data Warehouse | SQL-based analytics at scale |
+| **HDInsight** | Managed Clusters | Open-source (Hadoop/Spark/Kafka) |
+| **Databricks** | Spark Platform | Optimized Spark environment |
+| **Data Lake Analytics** | On-demand Jobs | Serverless query processing |
+
+**Key Concepts**:
+- **Data Lake**: Raw data storage in native format
+- **ETL vs ELT**: Synapse supports both patterns
+- **Serverless Options**: Data Lake Analytics, Synapse serverless
+
+#### **AI/ML Hierarchy**
+1. **Artificial Intelligence (AI)**: Human-like tasks
+2. **Machine Learning (ML)**: Improves without explicit programming
+3. **Deep Learning**: Neural networks for complex problems
+
+#### **Machine Learning Services**
+- **Azure ML Service**:
+  - Full ML lifecycle management
+  - Supports Python/R/TensorFlow
+  - Pipeline automation
+- **Azure ML Studio (Classic)**:
+  - Legacy drag-and-drop interface
+  - Limited functionality
+
+#### **Cognitive Services (Pre-built AI)**
+| Category | Example Services | Use Case |
+|----------|-----------------|----------|
+| **Language** | Translator, LUIS | Text translation, NLP |
+| **Vision** | Computer Vision, Face | Image recognition |
+| **Decision** | Anomaly Detector | Pattern analysis |
+| **Web Search** | Bing API | Search integration |
+| **Speech** | Speech-to-Text | Voice interfaces |
+
+#### **Key Exam Notes**
+- Synapse replaces SQL Data Warehouse
+- HDInsight vs Databricks: OSS vs optimized Spark
+- Cognitive Services require no ML expertise
+- Always choose ML Service over ML Studio (classic)
+- Data Lakes store raw, unstructured data
+
+### Part 28: Azure Serverless & Resource Management
+
+#### **Serverless Computing Characteristics**
+- **Event-driven execution**: Functions triggered by events (HTTP, timers, etc.)
+- **No infrastructure management**: Azure handles scaling/availability
+- **Micro-billing**: Pay per execution (100ms granularity)
+- **Polyglot support**: Multiple runtime languages (Node.js, Python, C#, etc.)
+
+#### **Key Serverless Services**
+| Service | Purpose | Key Feature |
+|---------|---------|-------------|
+| **Azure Functions** | Event-driven compute | Supports triggers/bindings |
+| **Blob Storage** | Serverless object storage | Auto-scaling capacity |
+| **Logic Apps** | Workflow automation | Low-code visual designer |
+| **Event Grid** | Event routing | Pub/sub messaging |
+
+#### **Resource Groups Essentials**
+- **Logical containers** for Azure resources
+- **Key attributes**:
+  - Region-scoped (but can contain cross-region resources)
+  - No cost for the group itself
+  - Mandatory for resource deployment
+- **Management benefits**:
+  - Unified lifecycle management
+  - Role-based access control (RBAC) boundary
+  - Billing/tagging organization
+
+#### **Function App Components**
+1. **Function App**: Container for functions (shared context)
+2. **Triggers**: Event types that invoke functions (HTTP, queue, timer)
+3. **Bindings**: Declarative connections to other services
+4. **Authorization Levels**:
+   - Function (key required)
+   - Anonymous (no key)
+   - Admin (master key)
+
+#### **Exam Critical Notes**
+- Serverless ≠ No servers (just abstracted)
+- Cold starts affect latency (mitigate with premium plans)
+- Always use resource groups for organization
+- Functions scale automatically (up to 200 instances by default)
+- Blob Storage supports triggers for serverless workflows
+
+### Part 29: Azure SLAs, Pricing & Licensing
+
+#### **Service Level Agreements (SLAs)**
+- **Definition**: Azure's uptime/connectivity guarantees per service
+- **Key Points**:
+  - Expressed as "nines" (99.9% = three nines)
+  - Free/shared tiers have no SLA
+  - Varies by service (e.g., Cosmos DB offers 99.999%)
+  - Check official SLA docs for each service
+
+#### **Service Credits**
+- **Compensation** for missed SLA targets
+- **Example VM Credits**:
+  - <99.9% uptime → 10% credit
+  - <99% → 25% credit
+  - <95% → 100% credit
+
+#### **Composite SLAs**
+- **Calculation**: Multiply individual SLAs (e.g., Web App 99.95% × SQL 99.99% = 99.94%)
+- **Improvement Strategies**:
+  - Add redundant components (queues/failovers)
+  - Design for resiliency
+
+#### **TCO Calculator**
+- **Purpose**: Compare on-prem vs. cloud costs
+- **Inputs**:
+  - Server specs (CPU/RAM/storage)
+  - Network bandwidth
+  - Labor/maintenance costs
+- **Output**: Detailed 1-5 year savings report
+
+#### **Azure Marketplace**
+- **Third-party solutions**: VMs, apps, SaaS
+- **Pricing Models**:
+  - Free
+  - BYOL (Bring Your Own License)
+  - Pay-as-you-go
+  - Free trials
+
+#### **Azure Hybrid Benefit (AHB)**
+- **Applies to**: Windows Server & SQL Server VMs
+- **Key Benefits**:
+  - Reuse on-prem licenses in Azure
+  - Significant cost savings (up to 85%)
+  - Enable during VM creation or after
+
+#### **Exam Notes**
+- Composite SLAs always ≤ weakest component SLA
+- AHB requires Software Assurance
+- Marketplace offers pre-configured solutions
+- Credits apply to service costs (not refunds)
+
+# AZ-900 Study Notes: Azure Subscriptions, Pricing, Cost Management, and Tags
+
+## Azure Subscriptions
+- **Definition**: Equivalent to an "Azure account"; used to manage and pay for Azure services.
+- **Subscription Tiers**:
+  - **Free Subscription**:
+    - Requires a credit card for sign-up.
+    - Includes $200 USD free credits for 30 days.
+    - Some Azure products free for 12 months.
+    - Limitations (e.g., restricted user access).
+    - Possible charges if exceeding free tier limits.
+  - **Pay-as-you-go (PAYG)**:
+    - Credit card required.
+    - Charged monthly based on resource usage.
+  - **Enterprise Agreement**:
+    - Discounted pricing for enterprises.
+    - Requires negotiation with Azure.
+  - **Student Subscription**:
+    - No credit card required.
+    - $100 USD credits for 12 months.
+    - Requires valid student email.
+
+## Managing Azure Spend
+- **Track Spend**:
+  - Navigate to **Subscriptions** in the Azure portal.
+  - View remaining credits and usage.
+  - Upgrade subscription when needed (e.g., from free to PAYG).
+- **Support Options**:
+  - Basic support included; premium support available for additional fees.
+
+## Azure Pricing Calculator
+- **Purpose**: Estimate costs for Azure products before deployment.
+- **Features**:
+  - No sign-in required.
+  - Downloadable Excel spreadsheets for sharing estimates.
+  - Example scenarios (e.g., CI/CD pipelines, virtual machines).
+  - Customizable inputs (region, OS, configuration).
+- **Usage**:
+  - Access via [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator).
+  - Adjust parameters (e.g., storage type, operations) to refine estimates.
+
+## Azure Cost Management
+- **Features**:
+  - **Cost Analysis**: Visualize spending with graphs and filters.
+  - **Budgets**: Set thresholds and receive alerts for overspending.
+- **Use Case**: Monitor and optimize cloud resource expenditures.
+
+## Resource Tags
+- **Definition**: Key-value pairs assigned to Azure resources for organization.
+- **Common Tag Examples**:
+  - Department (e.g., `Finance`, `IT`).
+  - Environment (e.g., `Dev`, `Prod`).
+  - Status (e.g., `Approved`, `Pending`).
+  - Project or team names.
+  - Compliance/security classifications.
+- **Benefits**:
+  - **Resource Management**: Group by workload/environment.
+  - **Cost Tracking**: Allocate costs by department/project.
+  - **Operations**: Identify mission-critical services.
+  - **Security**: Classify data for compliance (e.g., `PCI-DSS`).
+- **Best Practice**: Use tags consistently in production workloads.
+
+# AZ-900 Study Notes: Microsoft Purview, Azure Policies, Locks, Blueprints, and Portal
+
+## Microsoft Purview Information Protection
+- **Purpose**: Discover, classify, and protect sensitive data across hybrid environments.
+- **Four Domains**:
+  1. **Know Your Data**:
+     - **Sensitive Information Types**: Identifies data using regex or custom rules (e.g., keywords, confidence levels).
+     - **Trainable Classifiers**: Uses examples (not patterns) to classify data (built-in or custom).
+     - **Data Classification**: Visualizes labeled/retained items and user actions (via **Context/Activity Explorer**).
+  2. **Protect Your Data**:
+     - Tools: Encryption, access restrictions, visual markings (e.g., **Sensitivity Labels**, **Azure Information Protection**).
+  3. **Prevent Data Loss (DLP)**:
+     - Prevents accidental sharing (e.g., **Microsoft Purview DLP**, browser extensions for compliance).
+  4. **Govern Your Data**:
+     - **Data Lifecycle Management**: Retain/delete data per compliance needs (e.g., retention policies, labels).
+     - **Records Management**: Manages high-value items (e.g., legal/regulatory records) via file plans/disposition reviews.
+
+## Azure Policies
+- **Purpose**: Enforce organizational standards and assess compliance (no access restrictions).
+- **Components**:
+  - **Policy Definition**: JSON file with business rules.
+  - **Policy Assignment**: Scope (user/resource group/management group).
+  - **Initiative Definitions**: Groups of policies (e.g., PCI-DSS compliance).
+- **Use Case**: Compliance with standards like NIST, HIPAA, FedRAMP.
+
+## Resource Locks
+- **Purpose**: Prevent accidental deletion/modification of critical resources.
+- **Lock Types**:
+  - **Cannot Delete**: Allows read/modify but blocks deletion.
+  - **Read-Only**: Blocks updates/deletions (read-only access).
+
+## Azure Blueprints
+- **Purpose**: Deploy governed subscriptions with predefined patterns.
+- **Features**:
+  - **Declarative**: Predefined resources (ARM templates, policies, role assignments).
+  - **Relationship Tracking**: Links blueprint definitions to assignments.
+  - **Multi-Subscription Updates**: Upgrade multiple subscriptions simultaneously.
+- **vs. ARM Templates**:
+  - Blueprints maintain active relationships and support auditing/tracking.
+
+## Azure Portal
+- **Overview**: Web-based console for managing Azure resources (portal.azure.com).
+- **Preview Portal**:
+  - Access beta/pre-release features (preview.portal.azure.com).
+  - **Caution**: Avoid preview features in production (potential rollbacks).
+- **Accessing Previews**:
+  - Register features under **Subscriptions** > **Preview Features**.
+  - Example: Microsoft Fabric (requires organizational account).
+
+## Key Takeaways
+- **Purview**: Classify/protect data via labels, DLP, and governance.
+- **Policies**: Monitor compliance; initiatives group related policies.
+- **Locks**: Safeguard critical resources.
+- **Blueprints**: Standardize deployments with governance.
+- **Portal**: Use preview features cautiously; prefer stable releases for production.
+
+# AZ-900 Study Notes: Azure Cloud Shell, PowerShell, and CLI
+
+## Azure Cloud Shell
+- **Purpose**: Browser-accessible shell (Bash/PowerShell) for managing Azure resources.
+- **Features**:
+  - **Access**: Click the Cloud Shell icon in Azure Portal header.
+  - **Setup**: Requires a storage account (auto-created on first use).
+  - **Pre-installed Tools**: Includes Azure CLI (`az`) and PowerShell modules.
+- **Usage**:
+  - **Bash**: Linux-based commands (e.g., `pwd`, `ls`).
+  - **Azure CLI**: Run `az` commands (e.g., `az account list` to view subscriptions).
+- **Resource Providers**: Ensure `Microsoft.CloudShell` is registered (via **Subscriptions** > **Resource Providers**).
+
+## Azure PowerShell
+- **What is PowerShell?**:
+  - Task automation tool (command-line shell + scripting language).
+  - Built on .NET, returns objects (not just text).
+- **Azure PowerShell**:
+  - **Cmdlets**: Commands for managing Azure resources (e.g., `New-AzResourceGroup`).
+  - **Access**: Via Cloud Shell or local installation (Windows/macOS/Linux).
+
 ## Azure Files
     - Fully managed file share in cloud
     - Network protocols can be used
